@@ -2,6 +2,8 @@ import { useState } from "react";
 import Modal from "./Modal";
 import { useAuth } from "../context/AuthContext"; // adjust path as per your project
 
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
 const SwapModal = ({ isOpen, onClose, onSubmit, recipientId }) => {
   const { user, token } = useAuth();
 
@@ -35,7 +37,7 @@ const SwapModal = ({ isOpen, onClose, onSubmit, recipientId }) => {
       console.log(user);
 
       const response = await fetch(
-        "http://localhost:3000/api/swapRequests/request",
+        `${backendURL}/api/swapRequests/request`,
         {
           method: "POST",
           headers: {
