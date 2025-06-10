@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Carousel from "../components/Carousel";
+import { Menu, X } from "lucide-react";
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -57,18 +58,18 @@ const Dashboard = () => {
       {/* Toggle button for mobile */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="md:hidden p-3 bg-blue-600 text-white fixed z-50 top-4 left-4 rounded-lg shadow-lg"
+        className="md:hidden p-3 bg-white hover:bg-gray-600 text-black fixed z-50 top-13 left-0 shadow-lg"
       >
-        {sidebarOpen ? "Close" : "Skills"}
+        {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
       {/* Sidebar */}
       <aside
-        className={`bg-white shadow-lg p-4 md:w-64 overflow-y-auto fixed md:relative top-0 left-0 h-screen z-40 transition-transform transform ${
+        className={`bg-white shadow-lg p-4 md:w-64 overflow-y-auto fixed md:relative top-13 left-0 h-screen z-40 transition-transform transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 md:block`}
       >
-        <h2 className="text-xl font-bold mb-4 border-b pb-2">Available Skills</h2>
+        <h2 className="text-xl font-bold mb-4 border-b pb-2 pt-8">Available Skills</h2>
         <ul className="space-y-2 text-gray-700">
           {skills.length === 0 && <li>No skills found</li>}
           {skills.map((skill) => (
@@ -120,7 +121,7 @@ const Dashboard = () => {
         {Object.entries(groupedByCategory).map(([category, skillsObj]) => (
           <section key={category} className="mb-10">
             <h2 className="text-2xl font-extrabold mb-6 border-b pb-2">
-              Category: {category}
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Category: {category}
             </h2>
 
             {Object.entries(skillsObj).map(([skillName, skillCourses]) => (
