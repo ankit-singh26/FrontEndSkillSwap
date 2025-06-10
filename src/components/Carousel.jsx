@@ -1,4 +1,3 @@
-import { Star } from "lucide-react";
 import { useState } from "react";
 import SwapModal from "../components/SwapModal";
 
@@ -7,8 +6,15 @@ const Carousel = ({ items }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [recipientId, setRecipientId] = useState(null);
 
-  const next = () => setCurrent((prev) => (prev + 1) % items.length);
-  const prev = () => setCurrent((prev - 1 + items.length) % items.length);
+  if (!items.length) return null;
+
+  const next = () => {
+    setCurrent((prev) => (prev + 1) % items.length);
+  };
+
+  const prev = () => {
+    setCurrent((prev) => (prev - 1 + items.length) % items.length);
+  };
 
   const openModal = (item) => {
     setRecipientId(item.user._id);
@@ -25,16 +31,22 @@ const Carousel = ({ items }) => {
     closeModal();
   };
 
-  if (!items.length) return null;
-
   return (
-    <div className="relative w-full max-w-5xl mx-auto select-none">
+    <div className="relative w-full max-w-5xl mx-auto select-none overflow-hidden">
+      {/* Sliding container */}
       <div
         className="flex transition-transform duration-500 ease-in-out"
-        style={{ transform: `translateX(-${current * 100}%)` }}
+        style={{
+          width: `${items.length * 100}%`,
+          transform: `translateX(-${(current * 100) / items.length}%)`,
+        }}
       >
-        {items.map((item, index) => (
-          <div key={item._id} className="min-w-full px-4 flex justify-center">
+        {items.map((item) => (
+          <div
+            key={item._id}
+            className="px-4 flex justify-center"
+            style={{ width: `${100 / items.length}%`, flexShrink: 0 }}
+          >
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden w-full max-w-xl">
               {/* Thumbnail (Video) */}
               <div className="relative bg-gradient-to-r from-orange-400 to-pink-500 aspect-video">
@@ -53,8 +65,8 @@ const Carousel = ({ items }) => {
                   Skills: <span className="font-medium">{item.skills}</span>
                 </p>
                 <p className="text-gray-600 text-sm">
-                  Offering: <span className="font-medium">{item.categoryOffered}</span> | Looking for:{" "}
-                  <span className="font-medium">{item.lookingFor || item.categoryLookingFor}</span>
+                  Offering: <span className="font-medium">{item.categoryOffered}</span> | Looking
+                  for: <span className="font-medium">{item.lookingFor || item.categoryLookingFor}</span>
                 </p>
               </div>
 

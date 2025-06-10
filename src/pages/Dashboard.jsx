@@ -7,6 +7,7 @@ const Dashboard = () => {
   const [courses, setCourses] = useState([]);
   const [skills, setSkills] = useState([]);
   const [groupedByCategory, setGroupedByCategory] = useState({});
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -17,10 +18,8 @@ const Dashboard = () => {
           throw new Error(`Error ${response.status}: ${text}`);
         }
         const data = await response.json();
-
         setCourses(data);
 
-        // Extract unique skills
         const skillSet = new Set();
         data.forEach((course) => {
           const skillsArray = course.skills
@@ -30,16 +29,13 @@ const Dashboard = () => {
         });
         setSkills([...skillSet].sort());
 
-        // Group courses by category and skill
         const grouped = {};
         data.forEach((course) => {
           const category = course.categoryOffered || "Uncategorized";
           if (!grouped[category]) grouped[category] = {};
-
           const skillsArray = course.skills
             ? course.skills.split(",").map((s) => s.trim())
             : ["No Skill"];
-
           skillsArray.forEach((skill) => {
             if (!grouped[category][skill]) grouped[category][skill] = [];
             grouped[category][skill].push(course);
@@ -57,9 +53,21 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="flex h-screen">
-      {/* Left sidebar with skills */}
-      <aside className="w-64 bg-white shadow-lg overflow-y-auto p-4 sticky top-0 h-screen">
+    <div className="flex flex-col md:flex-row h-screen">
+      {/* Toggle button for mobile */}
+      <button
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        className="md:hidden p-3 bg-blue-600 text-white fixed z-50 top-4 left-4 rounded-lg shadow-lg"
+      >
+        {sidebarOpen ? "Close" : "Skills"}
+      </button>
+
+      {/* Sidebar */}
+      <aside
+        className={`bg-white shadow-lg p-4 md:w-64 overflow-y-auto fixed md:relative top-0 left-0 h-screen z-40 transition-transform transform ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0 md:block`}
+      >
         <h2 className="text-xl font-bold mb-4 border-b pb-2">Available Skills</h2>
         <ul className="space-y-2 text-gray-700">
           {skills.length === 0 && <li>No skills found</li>}
@@ -71,7 +79,10 @@ const Dashboard = () => {
                 const el = document.getElementById(
                   `skill-${skill.replace(/\s+/g, "-")}`
                 );
-                if (el) el.scrollIntoView({ behavior: "smooth" });
+                if (el) {
+                  el.scrollIntoView({ behavior: "smooth" });
+                  setSidebarOpen(false);
+                }
               }}
               tabIndex={0}
               onKeyDown={(e) => {
@@ -79,7 +90,10 @@ const Dashboard = () => {
                   const el = document.getElementById(
                     `skill-${skill.replace(/\s+/g, "-")}`
                   );
-                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                  if (el) {
+                    el.scrollIntoView({ behavior: "smooth" });
+                    setSidebarOpen(false);
+                  }
                 }
               }}
               aria-label={`Scroll to skill ${skill}`}
@@ -90,8 +104,16 @@ const Dashboard = () => {
         </ul>
       </aside>
 
+      {/* Overlay for sidebar on small screens */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black opacity-30 z-30 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        ></div>
+      )}
+
       {/* Main content */}
-      <main className="flex-1 overflow-y-auto p-6">
+      <main className="flex-1 overflow-y-auto p-4 md:p-6 md:ml-64">
         {Object.keys(groupedByCategory).length === 0 && (
           <p className="text-center text-gray-500 mt-10">Loading courses...</p>
         )}
