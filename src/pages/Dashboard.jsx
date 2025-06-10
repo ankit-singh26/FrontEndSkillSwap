@@ -65,11 +65,11 @@ const Dashboard = () => {
 
       {/* Sidebar */}
       <aside
-        className={`bg-white shadow-lg p-4 md:w-64 overflow-y-auto fixed md:relative top-13 left-0 h-screen z-40 transition-transform transform ${
+        className={`bg-white shadow-lg p-4 md:w-64 overflow-y-auto fixed md:relative left-0 h-screen z-40 transition-transform transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 md:block`}
       >
-        <h2 className="text-xl font-bold mb-4 border-b pb-2 pt-8">Available Skills</h2>
+        <h2 className="text-xl font-bold mb-4 border-b pb-2 pl-20">Skills</h2>
         <ul className="space-y-2 text-gray-700">
           {skills.length === 0 && <li>No skills found</li>}
           {skills.map((skill) => (
