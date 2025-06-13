@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Carousel from "../components/Carousel";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronRight } from "lucide-react";
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -60,7 +60,7 @@ const Dashboard = () => {
         onClick={() => setSidebarOpen(!sidebarOpen)}
         className="md:hidden p-3 bg-white hover:bg-gray-600 text-black fixed z-50 top-13 left-0 shadow-lg"
       >
-        {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+        {sidebarOpen ? <X size={24} /> : <ChevronRight size={24} />}
       </button>
 
       {/* Sidebar */}
